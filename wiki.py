@@ -101,7 +101,7 @@ def fetch_and_send(json_data):
         st.error(f"Error occurred: {e}")
 
 # Streamlit UI
-st.title("Club World Cup Scraper")
+st.title("Club World Cup Data Update")
 st.markdown("Upload your Google Service Account JSON to update matches to Google Sheets.")
 
 uploaded_file = st.file_uploader("Upload Service Account JSON")
