@@ -115,7 +115,7 @@ def fetch_and_send(json_data):
 st.title("Club World Cup Scraper")
 st.markdown("Upload your Google Service Account JSON to update matches to Google Sheets.")
 
-uploaded_file = st.file_uploader("Upload Service Account JSON", type=["json"])
+uploaded_file = st.file_uploader("Upload Service Account JSON")
 
 if uploaded_file:
     try:
