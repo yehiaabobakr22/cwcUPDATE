@@ -65,8 +65,8 @@ def fetch_and_send(json_data):
         for score in scores:
             match = re.match(r"^\s*(\d+)\s*[–-]\s*(\d+)\s*$", score)
             if match:
-                home_scores.append(match.group(1))
-                away_scores.append(match.group(2))
+                home_scores.append(int(match.group(1)))
+                away_scores.append(int(match.group(2)))
             else:
                 home_scores.append("")
                 away_scores.append("")
