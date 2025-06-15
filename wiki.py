@@ -6,6 +6,7 @@ from google.oauth2.service_account import Credentials
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import json
+import re
 
 # إعدادات Google Sheets
 SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/1tszZet3ePbSkPM6YBsyBnZ3tmmHgA4YJPz86KTotFZs/edit#gid=0"
@@ -57,8 +58,18 @@ def fetch_and_send(json_data):
         times = [t.get_text(strip=True) for t in soup.find_all(class_="ftime")]
         home_teams = [h.get_text(strip=True) for h in soup.find_all(class_="fhome")]
         away_teams = [a.get_text(strip=True) for a in soup.find_all(class_="faway")]
-        home_scores = [h.get_text(strip=True) for h in soup.find_all(class_="fhgoal")]
-        away_scores = [a.get_text(strip=True) for a in soup.find_all(class_="fagoal")]
+        scores = [s.get_text(strip=True) for s in soup.find_all(class_="fscore")]
+        home_scores = []
+        away_scores = []
+
+        for score in scores:
+            match = re.match(r"^\s*(\d+)\s*[–-]\s*(\d+)\s*$", score)
+            if match:
+                home_scores.append(match.group(1))
+                away_scores.append(match.group(2))
+            else:
+                home_scores.append("")
+                away_scores.append("")
 
         num_matches = min(len(dates), len(times), len(home_teams), len(away_teams), len(home_scores), len(away_scores))
         if num_matches == 0:
@@ -101,10 +112,10 @@ def fetch_and_send(json_data):
         st.error(f"Error occurred: {e}")
 
 # Streamlit UI
-st.title("Club World Cup Data Update")
+st.title("Club World Cup Scraper")
 st.markdown("Upload your Google Service Account JSON to update matches to Google Sheets.")
 
-uploaded_file = st.file_uploader("Upload Service Account JSON")
+uploaded_file = st.file_uploader("Upload Service Account JSON", type=["json"])
 
 if uploaded_file:
     try:
