@@ -63,7 +63,8 @@ def fetch_and_send(json_data):
         away_scores = []
 
         for score in scores:
-            match = re.match(r"^\s*(\d+)\s*[–-]\s*(\d+)\s*$", score)
+            # Match formats like '3–4', '3–4 (a.e.t.)', '2–3 (pen.)'
+            match = re.match(r"^\s*(\d+)\s*[–-]\s*(\d+)", score)
             if match:
                 home_scores.append(int(match.group(1)))
                 away_scores.append(int(match.group(2)))
@@ -115,7 +116,7 @@ def fetch_and_send(json_data):
 st.title("Club World Cup Scraper")
 st.markdown("Upload your Google Service Account JSON to update matches to Google Sheets.")
 
-uploaded_file = st.file_uploader("Upload Service Account JSON")
+uploaded_file = st.file_uploader("Upload Service Account JSON", type=["json"])
 
 if uploaded_file:
     try:
